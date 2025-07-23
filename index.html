@@ -1,41 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>位置获取</title>
-    <script>
-function getIPInfo() {
-    // 使用fetch API发送请求到第三方IP定位服务
-    fetch('http://ip-api.com/json/?fields=61439')
-        .then(response => response.json())
-        .then(data => {
-            // 检查请求是否成功
-            if (data.status === 'success') {
-                // 将获取到的信息显示在页面上
-                document.getElementById('ipInfo').textContent =
-                    'IP地址: ' + data.query + '\n' +
-                    '国家: ' + data.country + ' (' + data.countryCode + ')\n' +
-                    '地区: ' + data.regionName + ', ' + data.region + '\n' +
-                    '城市: ' + data.city + '\n' +
-                    '纬度: ' + data.lat + '\n' +
-                    '经度: ' + data.lon + '\n' +
-                    '时区: ' + data.timezone + '\n' +
-                    'ISP: ' + data.isp + '\n' +
-                    '组织: ' + data.org;
-            } else {
-                // 如果请求失败，显示错误信息
-                document.getElementById('ipInfo').textContent = '无法获取IP信息：' + data.message;
-            }
-        })
-        .catch(error => {
-            // 如果捕获到错误，显示错误信息
-            console.error('请求IP信息失败:', error);
-            document.getElementById('ipInfo').textContent = '请求IP信息失败';
-        });
-}
-    </script>
+    <title>IP 定位（仅限国家/省份/城市）</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <button onclick="getLocation()">获取我的位置</button>
-    <p>注意：此功能需要用户主动授权</p>
+    <h2>IP 定位（免费，但只能到城市级别）</h2>
+    <button onclick="getIPLocation()">获取我的大致位置</button>
+    <div id="result"></div>
+
+    <script>
+        function getIPLocation() {
+            fetch("https://ipapi.co/json/")
+                .then(response => response.json())
+                .then(data => {
+                    const result = `
+                        <p><strong>IP 地址：</strong> ${data.ip}</p>
+                        <p><strong>国家：</strong> ${data.country_name} (${data.country_code})</p>
+                        <p><strong>省份：</strong> ${data.region} (${data.region_code})</p>
+                        <p><strong>城市：</strong> ${data.city}</p>
+                        <p><strong>经纬度：</strong> ${data.latitude}, ${data.longitude}</p>
+                    `;
+                    document.getElementById("result").innerHTML = result;
+                })
+                .catch(error => {
+                    document.getElementById("result").innerHTML = "定位失败：" + error;
+                });
+        }
+    </script>
 </body>
 </html>
