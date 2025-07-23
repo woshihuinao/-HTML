@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>位置获取</title>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    showPosition, 
+                    showError,
+                    {enableHighAccuracy: true}
+                );
+            } else {
+                alert("浏览器不支持地理定位");
+            }
+        }
+        
+        function showPosition(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            alert(`获取到位置：\n纬度: ${lat}\n经度: ${lng}`);
+            
+            // 这里可以添加地图显示代码
+            window.open(`https://maps.google.com/?q=${lat},${lng}`);
+        }
+        
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("用户拒绝了位置请求");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("位置信息不可用");
+                    break;
+                case error.TIMEOUT:
+                    alert("获取位置超时");
+                    break;
+                default:
+                    alert("未知错误");
+            }
+        }
+    </script>
+</head>
+<body>
+    <button onclick="getLocation()">获取我的位置</button>
+    <p>注意：此功能需要用户主动授权</p>
+</body>
+</html>
