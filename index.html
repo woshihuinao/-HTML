@@ -3,42 +3,35 @@
 <head>
     <title>位置获取</title>
     <script>
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    showPosition, 
-                    showError,
-                    {enableHighAccuracy: true}
-                );
+function getIPInfo() {
+    // 使用fetch API发送请求到第三方IP定位服务
+    fetch('http://ip-api.com/json/?fields=61439')
+        .then(response => response.json())
+        .then(data => {
+            // 检查请求是否成功
+            if (data.status === 'success') {
+                // 将获取到的信息显示在页面上
+                document.getElementById('ipInfo').textContent =
+                    'IP地址: ' + data.query + '\n' +
+                    '国家: ' + data.country + ' (' + data.countryCode + ')\n' +
+                    '地区: ' + data.regionName + ', ' + data.region + '\n' +
+                    '城市: ' + data.city + '\n' +
+                    '纬度: ' + data.lat + '\n' +
+                    '经度: ' + data.lon + '\n' +
+                    '时区: ' + data.timezone + '\n' +
+                    'ISP: ' + data.isp + '\n' +
+                    '组织: ' + data.org;
             } else {
-                alert("浏览器不支持地理定位");
+                // 如果请求失败，显示错误信息
+                document.getElementById('ipInfo').textContent = '无法获取IP信息：' + data.message;
             }
-        }
-        
-        function showPosition(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            alert(`获取到位置：\n纬度: ${lat}\n经度: ${lng}`);
-            
-            // 这里可以添加地图显示代码
-            window.open(`https://maps.google.com/?q=${lat},${lng}`);
-        }
-        
-        function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    alert("用户拒绝了位置请求");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    alert("位置信息不可用");
-                    break;
-                case error.TIMEOUT:
-                    alert("获取位置超时");
-                    break;
-                default:
-                    alert("未知错误");
-            }
-        }
+        })
+        .catch(error => {
+            // 如果捕获到错误，显示错误信息
+            console.error('请求IP信息失败:', error);
+            document.getElementById('ipInfo').textContent = '请求IP信息失败';
+        });
+}
     </script>
 </head>
 <body>
