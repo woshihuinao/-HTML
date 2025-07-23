@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>IP 定位（仅限国家/省份/城市）</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>IP 定位（国家/省/市）</title>
 </head>
 <body>
-    <h2>IP 定位（免费，但只能到城市级别）</h2>
+    <h2>IP 定位（无API，但精度较低）</h2>
     <button onclick="getIPLocation()">获取我的大致位置</button>
     <div id="result"></div>
 
     <script>
         function getIPLocation() {
-            fetch("https://ipapi.co/json/")
+            fetch("https://ipapi.co/json/")  // 免费IP定位服务
                 .then(response => response.json())
                 .then(data => {
                     const result = `
-                        <p><strong>IP 地址：</strong> ${data.ip}</p>
-                        <p><strong>国家：</strong> ${data.country_name} (${data.country_code})</p>
-                        <p><strong>省份：</strong> ${data.region} (${data.region_code})</p>
+                        <p><strong>国家：</strong> ${data.country_name}</p>
+                        <p><strong>省份：</strong> ${data.region}</p>
                         <p><strong>城市：</strong> ${data.city}</p>
                         <p><strong>经纬度：</strong> ${data.latitude}, ${data.longitude}</p>
                     `;
                     document.getElementById("result").innerHTML = result;
                 })
                 .catch(error => {
-                    document.getElementById("result").innerHTML = "定位失败：" + error;
+                    document.getElementById("result").innerHTML = "定位失败，请尝试刷新或换浏览器";
                 });
         }
     </script>
